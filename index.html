@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#7650a5">
+<meta name="description" content="Fanfic Exchange: una comunidad para descubrir y compartir historias.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>Fanfic Exchange</title>
+<style>
+:root{color-scheme:dark;--bg:#17131e;--panel:#241d30;--line:#40334f;--text:#f7f1ff;--muted:#b9abc9;--accent:#a77be0;--accent2:#7650a5}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px system-ui,sans-serif}
+header{position:sticky;top:0;background:#17131eef;backdrop-filter:blur(12px);padding:14px 16px;border-bottom:1px solid var(--line);z-index:2}
+.brand{font-weight:800;font-size:19px}.sub{font-size:12px;color:var(--muted)}
+main{max-width:760px;margin:auto;padding:16px 14px 90px}.hero{padding:22px;border-radius:18px;background:linear-gradient(135deg,#38264d,#7650a5);margin-bottom:14px}
+h1{font-size:25px;margin:5px 0 8px}h2{font-size:20px;margin:0 0 12px}p{line-height:1.5}.muted{color:var(--muted);font-size:13px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:15px;margin:10px 0}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:14px}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;background:#211a2a;border-top:1px solid var(--line);padding:8px 3px calc(8px + env(safe-area-inset-bottom));z-index:3}
+nav button{border:0;background:none;color:var(--muted);font-size:11px;padding:7px 5px;border-radius:9px}nav button.active{background:#49345f;color:white}
+button,.button{border:0;border-radius:10px;background:var(--accent);color:#21152e;padding:11px 14px;font-weight:750;font-size:14px;cursor:pointer}
+button.secondary{background:#382d47;color:var(--text);border:1px solid var(--line)}
+input,textarea,select{width:100%;background:#191421;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:12px;font:inherit;margin:5px 0 12px}
+label{font-size:13px;color:var(--muted)}.row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.row>*{flex:1}
+.badge{font-size:11px;padding:4px 8px;border-radius:30px;background:#382d47;color:#d9c3f4}
+.hidden{display:none!important}.book{font-size:28px;width:55px;height:68px;display:grid;place-items:center;background:#49345f;border-radius:8px;flex-shrink:0}
+.story{display:flex;gap:12px;align-items:center}.story h3{margin:0 0 4px;font-size:16px}
+.notice{border-left:3px solid var(--accent);padding:10px 12px;background:#241d30;border-radius:7px;font-size:13px;color:var(--muted)}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:20px}
+</style>
+</head>
+<body>
+<header><div class="brand">📚 Fanfic Exchange</div><div class="sub">Las historias crecen en comunidad</div></header>
+<main>
+<section id="home">
+ <div class="hero"><span class="badge">COMUNIDAD DE LECTORES</span><h1>Tu próxima historia te está esperando.</h1><p>Descubrí fanfics, compartí reseñas genuinas y participá de una comunidad de escritores.</p><button onclick="show('discover')">Explorar historias</button></div>
+ <div class="stats"><div class="stat"><div class="muted">Tickets de demostración</div><strong id="homeTickets">0</strong></div><div class="stat"><div class="muted">Tareas aprobadas</div><strong id="homeApproved">0</strong></div></div>
+ <div class="card"><h2>Cómo funciona</h2><p>📖 Descubrí una historia y leé su capítulo.</p><p>✍️ Compartí una reseña sincera dentro de la comunidad.</p><p>🪙 Enviá tu actividad para revisión y recibí tickets si se aprueba.</p></div>
+ <div class="notice">Esta versión guarda datos solamente en este dispositivo. Todavía no hay cuentas compartidas ni tickets reales.</div>
+</section>
+<section id="discover" class="hidden"><h2>Descubrir historias</h2><input id="search" placeholder="Buscar por título o género"><div id="stories"></div></section>
+<section id="tasks" class="hidden"><h2>Mis tareas</h2><div class="card"><span class="badge">ACTIVIDAD DE LECTURA</span><h3>Enviar una reseña</h3><label>Historia</label><select id="taskStory"><option>El reino de las sombras</option><option>Corazones de acero</option><option>El último verano</option></select><label>Capítulo leído</label><input id="chapter" placeholder="Ej. Capítulo 1"><label>Reseña sobre la lectura</label><textarea id="review" rows="4" placeholder="¿Qué te llamó la atención? ¿Qué personaje o momento destacarías?"></textarea><button onclick="submitTask()">Enviar para revisión</button><p id="taskMsg" class="muted"></p></div><div id="taskList"></div></section>
+<section id="wallet" class="hidden"><h2>Mi cartera</h2><div class="hero"><div class="muted">SALDO DE DEMOSTRACIÓN</div><h1>🪙 <span id="walletTickets">0</span></h1></div><div id="ledger" class="card">Todavía no hay movimientos.</div></section>
+<section id="publish" class="hidden"><h2>Agregar mi historia</h2><div class="card"><label>Título</label><input id="newTitle" placeholder="Título del fanfic"><label>Género</label><input id="newGenre" placeholder="Fantasía, aventura..."><label>Enlace público</label><input id="newUrl" placeholder="https://..."><label>Descripción</label><textarea id="newDesc" rows="3" placeholder="Presentá tu historia"></textarea><button onclick="addStory()">Guardar historia</button><p id="publishMsg" class="muted"></p></div><div id="myStories"></div></section>
+<section id="profile" class="hidden"><h2>Mi perfil</h2><div class="card"><label>Nombre visible</label><input id="username" placeholder="Tu seudónimo"><button onclick="saveProfile()">Guardar perfil</button><p id="profileMsg" class="muted"></p></div><div class="notice">No ingreses contraseñas de Wattpad. Fanfic Exchange no está afiliada a Wattpad.</div></section>
+<footer>Fanfic Exchange · Primera base PWA</footer>
+</main>
+<nav>
+<button class="active" data-page="home" onclick="show('home')">🏠<br>Inicio</button>
+<button data-page="discover" onclick="show('discover')">🔎<br>Historias</button>
+<button data-page="tasks" onclick="show('tasks')">✍️<br>Tareas</button>
+<button data-page="wallet" onclick="show('wallet')">🪙<br>Cartera</button>
+<button data-page="publish" onclick="show('publish')">➕<br>Publicar</button>
+<button data-page="profile" onclick="show('profile')">👤<br>Perfil</button>
+</nav>
+<script>
+const defaults=[
+ {title:"El reino de las sombras",genre:"Fantasía · Aventura",desc:"Una aventura en un reino donde la noche guarda secretos.",url:"",emoji:"🌙"},
+ {title:"Corazones de acero",genre:"Ciencia ficción",desc:"Una ciudad futurista y un grupo de jóvenes extraordinarios.",url:"",emoji:"⚙️"},
+ {title:"El último verano",genre:"Slice of life",desc:"Amistad, cambios y recuerdos de una escuela.",url:"",emoji:"☀️"}
+];
+let state=JSON.parse(localStorage.getItem("fx-state")||"null")||{tickets:0,approved:0,user:"",stories:defaults,tasks:[],ledger:[]};
+function persist(){localStorage.setItem("fx-state",JSON.stringify(state));render()}
+function show(id){document.querySelectorAll("main section").forEach(s=>s.classList.toggle("hidden",s.id!==id));document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===id));}
+function render(){
+ ["homeTickets","walletTickets"].forEach(id=>document.getElementById(id).textContent=state.tickets);
+ document.getElementById("homeApproved").textContent=state.approved;
+ document.getElementById("username").value=state.user;
+ let q=(document.getElementById("search").value||"").toLowerCase();
+ document.getElementById("stories").innerHTML=state.stories.filter(s=>(s.title+" "+s.genre).toLowerCase().includes(q)).map(s=>`<div class="card story"><div class="book">${s.emoji||"📘"}</div><div><h3>${escapeHtml(s.title)}</h3><div class="muted">${escapeHtml(s.genre||"Sin género")}</div><div class="muted">${escapeHtml(s.desc||"")}</div></div></div>`).join("")||'<p class="muted">No se encontraron historias.</p>';
+ document.getElementById("taskList").innerHTML=state.tasks.slice().reverse().map(t=>`<div class="card"><b>${escapeHtml(t.story)}</b><p class="muted">${escapeHtml(t.chapter)} · ${t.status}</p><p>${escapeHtml(t.review)}</p></div>`).join("")||'<p class="muted">Todavía no enviaste tareas.</p>';
+ document.getElementById("ledger").innerHTML=state.ledger.map(x=>`<p>${escapeHtml(x)}</p>`).join("")||"Todavía no hay movimientos.";
+ document.getElementById("myStories").innerHTML=state.stories.filter(s=>s.owner===state.user).map(s=>`<div class="card">${escapeHtml(s.title)}</div>`).join("");
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function submitTask(){let chapter=document.getElementById("chapter").value.trim(),review=document.getElementById("review").value.trim();if(!chapter||review.length<20){document.getElementById("taskMsg").textContent="Indicá el capítulo y escribí una reseña de al menos 20 caracteres.";return}state.tasks.push({story:document.getElementById("taskStory").value,chapter,review,status:"Pendiente de revisión"});document.getElementById("chapter").value="";document.getElementById("review").value="";document.getElementById("taskMsg").textContent="Solicitud guardada en este dispositivo. No se acreditaron tickets.";persist()}
+function addStory(){let title=document.getElementById("newTitle").value.trim(),url=document.getElementById("newUrl").value.trim();if(!title||!/^https?:\/\//i.test(url)){document.getElementById("publishMsg").textContent="Completá el título y un enlace válido.";return}state.stories.push({title,genre:document.getElementById("newGenre").value,desc:document.getElementById("newDesc").value,url,emoji:"📘",owner:state.user});document.getElementById("publishMsg").textContent="Historia agregada a este dispositivo.";persist()}
+function saveProfile(){state.user=document.getElementById("username").value.trim();document.getElementById("profileMsg").textContent="Perfil local actualizado.";persist()}
+document.getElementById("search").addEventListener("input",render);
+if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+render();
+</script>
+</body></html>
