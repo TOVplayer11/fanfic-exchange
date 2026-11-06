@@ -1,0 +1,19 @@
+FANFIC EXCHANGE · ANDROID PWA STARTER
+
+Contenido:
+- index.html: interfaz adaptable con navegación, catálogo, tareas locales, cartera y perfil.
+- manifest.webmanifest: metadatos de instalación PWA.
+- sw.js: caché básica para abrir la interfaz sin conexión después de la primera visita.
+- icon.svg: icono.
+
+IMPORTANTE:
+Esta entrega es una base de interfaz local. NO contiene autenticación real, base de datos compartida, servidor, revisión administrativa real ni sincronización entre dispositivos. Los datos se guardan en el almacenamiento del navegador de un solo dispositivo.
+No uses contraseñas de Wattpad ni prometas tickets reales con esta versión.
+
+Para instalar en Android:
+1. Publica estos archivos en un hosting HTTPS compatible con archivos estáticos.
+2. Abre la dirección HTTPS en Chrome para Android.
+3. Abre el menú de Chrome y elige "Instalar aplicación" o "Agregar a pantalla principal".
+4. Si no aparece la opción, verifica que el sitio esté en HTTPS y que manifest.webmanifest y sw.js se carguen correctamente.
+
+El backend real será una etapa posterior: autenticación, base de datos, reglas de seguridad y funciones de servidor para aprobar tareas y acreditar tickets.
